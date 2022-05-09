@@ -4,10 +4,13 @@ import math
 
 class Matrix:
 
+    # Basic constructor takes library files and calls the calculate method to get the correlation matrix
     def __init__(self, library):
         self.files = library.spectra_files
         self.corr_matrix = self.calculate()
 
+    # Calculate creates a correlation matrix of every pair of spectra within the library
+    # Calls functions read, smooth, and correlate
     def calculate(self):
         combined_data = []
         for file in self.files:
@@ -26,12 +29,14 @@ class Matrix:
         return corr_matrix
 
 
+# Returns the derivative of the spectrum as a list
 def smooth(data):
     for i in range(2, len(data) - 1):
         derivatives = (data[i + 1] - data[i - 1]) / 2
         return derivatives
 
 
+# Reads and returns the absorbance values from spectra in .csv format as a list
 def read(filename):
     with open(filename, newline='') as csvfile:
         data_reader = csv.reader(csvfile, dialect='excel')
@@ -41,5 +46,6 @@ def read(filename):
     return data
 
 
+# Returns the correlation value between two spectra
 def correlate(spec_a, spec_b):
     return math.sqrt((spec_a @ spec_b) ** 2) / ((spec_a @ spec_a) * (spec_b @ spec_b))
