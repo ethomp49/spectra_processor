@@ -23,7 +23,20 @@ class MainWindow(QMainWindow):
         self.stack_widget = QStackedWidget()
         self.main_layout.addWidget(self.stack_widget)
 
-        self.import_page = QWidget()
+        self.import_page = ImportPage()
+        self.results_page = ResultsPage()
+
+        self.stack_widget.addWidget(self.import_page)
+        self.stack_widget.addWidget(self.results_page)
+
+        self.main_widget.setLayout(self.main_layout)
+        self.setCentralWidget(self.main_widget)
+        self.show()
+
+
+class ImportPage(QWidget):
+    def __init__(self):
+        super(ImportPage, self).__init__()
         self.import_layout = QVBoxLayout()
 
         self.file_buttons = QWidget()
@@ -43,9 +56,18 @@ class MainWindow(QMainWindow):
 
         self.calculate_button = QPushButton("Calculate")
         self.import_layout.addWidget(self.calculate_button)
-        self.import_page.setLayout(self.import_layout)
+        self.setLayout(self.import_layout)
 
-        self.results_page = QWidget()
+        self.delete_action = QAction()
+        self.delete_action.setShortcut(QKeySequence.StandardKey.Delete)
+        self.remove_button.addAction(self.delete_action)
+        self.remove_button.clicked.connect(self.delete_action.trigger)
+
+
+class ResultsPage(QWidget):
+    def __init__(self):
+        super(ResultsPage, self).__init__()
+
         self.results_layout = QVBoxLayout()
 
         self.results_table = QTableWidget()
@@ -54,19 +76,7 @@ class MainWindow(QMainWindow):
 
         self.export_button = QPushButton("Export")
         self.results_layout.addWidget(self.export_button)
-        self.results_page.setLayout(self.results_layout)
-
-        self.stack_widget.addWidget(self.import_page)
-        self.stack_widget.addWidget(self.results_page)
-
-        self.main_widget.setLayout(self.main_layout)
-        self.setCentralWidget(self.main_widget)
-        self.show()
-
-        self.delete_action = QAction()
-        self.delete_action.setShortcut(QKeySequence.StandardKey.Delete)
-        self.remove_button.addAction(self.delete_action)
-        self.remove_button.clicked.connect(self.delete_action.trigger)
+        self.setLayout(self.results_layout)
 
         self.copy_action = QAction()
         self.copy_action.setShortcut(QKeySequence.StandardKey.Copy)
